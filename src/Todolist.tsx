@@ -1,6 +1,7 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import {FilterValuesType} from './App';
-import {AddItenForm} from "./components/AddItenForm";
+import {AddItemForm} from "./components/AddItemForm";
+import {EditableSpan} from "./components/EditableSpan";
 
 export type TaskType = {
     id: string
@@ -61,7 +62,7 @@ export function Todolist(props: PropsType) {
           <h3> {props.title}
             <button onClick={removeTodolist}>x</button>
         </h3>
-        <AddItenForm callBack={callBackHandler}  />
+        <AddItemForm callBack={callBackHandler}  />
 
         <ul>
             {
@@ -74,7 +75,7 @@ export function Todolist(props: PropsType) {
 
                     return <li key={t.id} className={t.isDone ? "is-done" : ""}>
                         <input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>
-                        <span>{t.title}</span>
+                        <EditableSpan title={t.title}/>
                         <button onClick={()=>onClickHandler(t.id)}>x</button>
                     </li>
                 })
