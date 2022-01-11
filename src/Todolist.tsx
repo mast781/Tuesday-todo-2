@@ -19,64 +19,59 @@ type PropsType = {
     changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     removeTodolist: (id: string) => void
     filter: FilterValuesType
+    updateTask: (todolistId: string, id: string, title: string) => void
+    updateTodolist: (todolistId: string,  title: string) => void
 }
 
 export function Todolist(props: PropsType) {
-    // let [title, setTitle] = useState("")
-    // let [error, setError] = useState<string | null>(null)
-    // const addTask = () => {
-    //     let newTitle = title.trim();
-    //     if (newTitle !== "") {
-    //         props.addTask(newTitle, props.id);
-    //         setTitle("");
-    //     } else {
-    //         setError("Title is required");
-    //     }
-    // }
 
-    // const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setTitle(e.currentTarget.value)
-    // }
-
-    // const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     setError(null);
-    //     if (e.charCode === 13) {
-    //         addTask();
-    //     }
-    // }
 
     const removeTodolist = () => props.removeTodolist(props.id)
     const onAllClickHandler = () => props.changeFilter("all", props.id);
     const onActiveClickHandler = () => props.changeFilter("active", props.id);
     const onCompletedClickHandler = () => props.changeFilter("completed", props.id);
 
-    const callBackHandler=(title:string)=>{
-        props.addTask(title,props.id)
+    const callBackHandler = (title: string) => {
+        props.addTask(title, props.id)
     }
 
-    const onClickHandler = (tID:string) => {
+    const onClickHandler = (tID: string) => {
         props.removeTask(tID, props.id)
     }
 
+    const callBackHandlerForUpdateTask = (tID: string, title: string) => {
+        props.updateTask(props.id, tID, title)
+    }
+
+    const callBackHandlerForUpdateTodolist = (tID: string, title: string) => {
+        props.updateTodolist(props.id, title)
+    }
+
+    const onChangeHandler = (tID: string, e: ChangeEvent<HTMLInputElement>) => {
+        let newIsDoneValue = e.currentTarget.checked;
+        props.changeTaskStatus(tID, newIsDoneValue, props.id);
+    }
+
     return <div>
-          <h3> {props.title}
+        <h3> <EditableSpan title={props.title} callBack={(title) => callBackHandlerForUpdateTodolist(props.id, title)}/>{/*{props.title}*/}
             <button onClick={removeTodolist}>x</button>
         </h3>
-        <AddItemForm callBack={callBackHandler}  />
+        <AddItemForm callBack={callBackHandler}/>
 
         <ul>
             {
                 props.tasks.map(t => {
-                    // const onClickHandler = () => props.removeTask(t.id, props.id)
-                    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+
+                    //Вынести функцию наверх
+                    /*const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
                         let newIsDoneValue = e.currentTarget.checked;
                         props.changeTaskStatus(t.id, newIsDoneValue, props.id);
-                    }
+                    }*/
 
                     return <li key={t.id} className={t.isDone ? "is-done" : ""}>
-                        <input type="checkbox" onChange={onChangeHandler} checked={t.isDone}/>
-                        <EditableSpan title={t.title}/>
-                        <button onClick={()=>onClickHandler(t.id)}>x</button>
+                        <input type="checkbox" onChange={(e) => onChangeHandler(t.id, e)} checked={t.isDone}/>
+                        <EditableSpan title={t.title} callBack={(title) => callBackHandlerForUpdateTask(t.id, title)}/>
+                        <button onClick={() => onClickHandler(t.id)}>x</button>
                     </li>
                 })
             }
