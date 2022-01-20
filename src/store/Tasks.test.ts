@@ -1,4 +1,12 @@
-import {addSalary, divSalary, fallSalary, multSalary} from "./Tasks";
+import {
+    addSalary,
+    AddSalaryActionType,
+    divSalary, DivSalaryActionType,
+    fallSalary,
+    FallSalaryActionType,
+    multSalary, MultSalaryActionType,
+    salaryReducer
+} from "./Tasks";
 
 
 test("addSalary", () => {
@@ -44,5 +52,53 @@ test("divSalary", () => {
     const result = divSalary(salary, coefficient)
 
     expect(result).toBe(630)
+
+})
+
+test("ADD-SALLARY", () => {
+
+    const salary: number = 700
+    const action: AddSalaryActionType = {
+        type: "ADD_SALARY",
+        bonus: 300
+    }
+
+    expect(salaryReducer(salary, action)).toBe(1000)
+
+})
+
+test("FALL-SALLARY", () => {
+
+    const salary: number = 700
+    const action: FallSalaryActionType = {
+        type: "FALL_SALARY",
+        minus: 50
+    }
+
+    expect(salaryReducer(salary, action)).toBe(650)
+
+})
+
+test("MULT-SALLARY", () => {
+
+    const salary: number = 700
+    const action: MultSalaryActionType = {
+        type: "MULT_SALARY",
+        coefficient: 1.2
+    }
+
+    expect(salaryReducer(salary, action)).toBe(840)
+
+})
+
+test("DIV-SALLARY", () => {
+
+    const salary: number = 700
+    const action: DivSalaryActionType = {
+        type: "DIV_SALARY",
+        coefficient: 0.9
+    }
+
+    expect(salaryReducer(salary, action)).toBe(630)
 
 })
