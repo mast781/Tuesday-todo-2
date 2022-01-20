@@ -43,3 +43,4 @@ export const salaryReducer = (salary: number, action: ActionType) => {
             return salary
     }
 }
+
